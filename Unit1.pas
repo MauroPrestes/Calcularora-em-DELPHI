@@ -24,6 +24,7 @@ type
     procedure btDividirClick(Sender: TObject);
   private
     { Private declarations }
+    procedure calcularResultado(operacao: String);
   public
     { Public declarations }
   end;
@@ -36,52 +37,50 @@ implementation
 {$R *.dfm}
 
 procedure TForm1.btDividirClick(Sender: TObject);
+begin
+  if txtNum2.Text = '0' then
+    ShowMessage('Impossivel dividir por zero!')
+  else
+  calcularResultado('dividir');
+end;
+
+procedure TForm1.btMultiplicarClick(Sender: TObject);
+begin
+ calcularResultado('multiplicar');
+end;
+
+procedure TForm1.btSomarClick(Sender: TObject);
+begin
+ calcularResultado('somar');
+end;
+
+procedure TForm1.btSubtrairClick(Sender: TObject);
+begin
+ calcularResultado('subtrair');
+end;
+
+procedure TForm1.calcularResultado(operacao: String);
 var
   num1, num2: Real;
   resultado: Real;
 begin
+  resultado := 0;
   num1 := StrToFloat(txtNum1.Text);
   num2 := StrToFloat(txtNum2.Text);
-  resultado := num1 / num2;
+
+  if operacao  = 'somar' then
+      resultado := num1 + num2;
+
+  if operacao = 'subtrair' then
+      resultado := num1 - num2;
+
+  if operacao = 'multiplicar' then
+      resultado := num1 * num2;
+
+  if operacao = 'dividir' then
+      resultado := num1 / num2;
+
   txtResultado.Text := FloatToStr(resultado);
-end;
-
-procedure TForm1.btMultiplicarClick(Sender: TObject);
-var
-  num1, num2, resultado: Real;
-begin
-  num1 := StrToFloat(txtNum1.Text);
-  num2 := StrToFloat(txtNum2.Text);
-  resultado := num1 * num2;
-  txtResultado.Text := FloatToStr(resultado);
-
-end;
-
-procedure TForm1.btSomarClick(Sender: TObject);
-var
-  num1, num2, resultado: Real;
-  //numeros: Integer(inteiros), Real(Decimais)
-  //bolean: True, False
-  //string: Textos
-  //char: Caractere
-begin
-  //algoritimo
-  num1 := StrToFloat(txtNum1.Text);
-  num2 := StrToFloat(txtNum2.Text);
-  resultado := num1 + num2;
-  txtResultado.Text := FloatToStr(resultado);
-
-end;
-
-procedure TForm1.btSubtrairClick(Sender: TObject);
-var
-num1, num2, resultado: Real;
-begin
-  num1 := StrToFloat(txtNum1.Text);
-  num2 := StrToFloat(txtNum2.Text);
-  resultado := num1 - num2;
-  txtResultado.Text := FloatToStr(resultado);
-
 end;
 
 end.
