@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Styles, Vcl.Themes;
 
 type
   TForm1 = class(TForm)
@@ -18,13 +18,17 @@ type
     btDividir: TButton;
     Label3: TLabel;
     txtResultado: TEdit;
+    opcVisual: TRadioGroup;
     procedure btSomarClick(Sender: TObject);
     procedure btSubtrairClick(Sender: TObject);
     procedure btMultiplicarClick(Sender: TObject);
     procedure btDividirClick(Sender: TObject);
+    procedure opcVisualClick(Sender: TObject);
+
+
   private
     { Private declarations }
-    procedure calcularResultado(operacao: String);
+    function calcularResultado(num1, num2: Real; operacao: String): Real;
   public
     { Public declarations }
   end;
@@ -36,51 +40,62 @@ implementation
 
 {$R *.dfm}
 
+
+{ TForm1 }
+
 procedure TForm1.btDividirClick(Sender: TObject);
 begin
-  if txtNum2.Text = '0' then
-    ShowMessage('Impossivel dividir por zero!')
-  else
-  calcularResultado('dividir');
+ if txtNum2.Text = '0' then
+  ShowMessage('Impossivel dividir por zero!')
+ else
+  txtresultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'dividir'));
 end;
 
 procedure TForm1.btMultiplicarClick(Sender: TObject);
 begin
- calcularResultado('multiplicar');
+   txtresultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'multiplicar'));
 end;
 
 procedure TForm1.btSomarClick(Sender: TObject);
 begin
- calcularResultado('somar');
+  txtResultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'somar'));
 end;
 
 procedure TForm1.btSubtrairClick(Sender: TObject);
 begin
- calcularResultado('subtrair');
+   txtResultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'subtrair'));
 end;
 
-procedure TForm1.calcularResultado(operacao: String);
+function TForm1.calcularResultado(num1, num2: Real; operacao: String): Real;
 var
-  num1, num2: Real;
   resultado: Real;
 begin
   resultado := 0;
-  num1 := StrToFloat(txtNum1.Text);
-  num2 := StrToFloat(txtNum2.Text);
 
-  if operacao  = 'somar' then
-      resultado := num1 + num2;
+  if operacao = 'somar' then
+    resultado:= num1 + num2;
 
   if operacao = 'subtrair' then
-      resultado := num1 - num2;
+    resultado:= num1 - num2;
 
   if operacao = 'multiplicar' then
-      resultado := num1 * num2;
+    resultado:= num1 * num2;
 
   if operacao = 'dividir' then
-      resultado := num1 / num2;
+    resultado:= num1 / num2;
 
-  txtResultado.Text := FloatToStr(resultado);
+  Result := resultado;
+end;
+
+
+procedure TForm1.opcVisualClick(Sender: TObject);
+begin
+ case opcVisual.ItemIndex of
+    0: TStyleManager.SetStyle('Windows');
+    1: TStyleManager.SetStyle('Glow');
+    2: TStyleManager.SetStyle('Aqua Light Slate');
+ end;
+
 end;
 
 end.

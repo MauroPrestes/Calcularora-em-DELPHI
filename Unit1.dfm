@@ -4,8 +4,8 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Calculadora'
-  ClientHeight = 309
-  ClientWidth = 218
+  ClientHeight = 483
+  ClientWidth = 250
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -38,14 +38,14 @@ object Form1: TForm1
   object txtNum1: TEdit
     Left = 40
     Top = 61
-    Width = 121
+    Width = 177
     Height = 23
     TabOrder = 0
   end
   object txtNum2: TEdit
     Left = 40
     Top = 125
-    Width = 121
+    Width = 177
     Height = 23
     TabOrder = 1
   end
@@ -88,8 +88,22 @@ object Form1: TForm1
   object txtResultado: TEdit
     Left = 40
     Top = 237
-    Width = 121
+    Width = 177
     Height = 23
     TabOrder = 6
+  end
+  object opcVisual: TRadioGroup
+    Left = 40
+    Top = 320
+    Width = 185
+    Height = 121
+    Caption = 'Alterar Visual da Calculadora'
+    ItemIndex = 1
+    Items.Strings = (
+      'Windows Classico'
+      'Grow'
+      'Aqua Ligth')
+    TabOrder = 7
+    OnClick = opcVisualClick
   end
 end
