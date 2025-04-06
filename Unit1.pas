@@ -24,11 +24,17 @@ type
     procedure btMultiplicarClick(Sender: TObject);
     procedure btDividirClick(Sender: TObject);
     procedure opcVisualClick(Sender: TObject);
+    procedure txtNum1Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
 
   private
     { Private declarations }
     function calcularResultado(num1, num2: Real; operacao: String): Real;
+    function validarCampos(): Boolean;
+    procedure habilitarBotoes(habilitado: Boolean);
+    procedure registrarLog(acao: String);
   public
     { Public declarations }
   end;
@@ -45,26 +51,47 @@ implementation
 
 procedure TForm1.btDividirClick(Sender: TObject);
 begin
- if txtNum2.Text = '0' then
-  ShowMessage('Impossivel dividir por zero!')
- else
-  txtresultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'dividir'));
+  if validarCampos then
+    begin
+      if txtNum2.Text = '0' then
+      begin
+       ShowMessage('Impossivel dividir por zero!');
+       registrarLog('Erro de divisão por zero');
+      end
+    else
+      begin
+        txtresultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'dividir'));
+         registrarLog('Dividir, num1'+txtNum1.Text+', num2='+txtNum2.Text+', resultado='+txtResultado.Text);
+
+      end;
+    end;
 end;
 
 procedure TForm1.btMultiplicarClick(Sender: TObject);
 begin
-   txtresultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'multiplicar'));
+  if validarCampos then
+  begin
+    txtresultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'multiplicar'));
+     registrarLog('Multiplicar, num1'+txtNum1.Text+', num2='+txtNum2.Text+', resultado='+txtResultado.Text);
+  end;
+
 end;
 
 procedure TForm1.btSomarClick(Sender: TObject);
 begin
-  txtResultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'somar'));
+   if validarCampos then
+    txtResultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'somar'));
+    registrarLog('Soma, num1'+txtNum1.Text+', num2='+txtNum2.Text+', resultado='+txtResultado.Text);
 end;
 
 procedure TForm1.btSubtrairClick(Sender: TObject);
-begin
-   txtResultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'subtrair'));
-end;
+  begin
+     if validarCampos then
+      begin
+         txtResultado.Text := FloatToStr(calcularResultado(StrToFloat(txtNum1.Text),StrToFloat(txtNum2.Text),'subtrair'));
+          registrarLog('Subtrair, num1'+txtNum1.Text+', num2='+txtNum2.Text+', resultado='+txtResultado.Text);
+      end;
+  end;
 
 function TForm1.calcularResultado(num1, num2: Real; operacao: String): Real;
 var
@@ -88,13 +115,90 @@ begin
 end;
 
 
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  registrarLog('Aplicação Finalizada');
+  registrarLog('------------------------------------');
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  registrarLog('------------------------------------');
+  registrarLog('Aplicação Iniciada');
+end;
+
+procedure TForm1.habilitarBotoes(habilitado: Boolean);
+begin
+  btSomar.Enabled := habilitado;
+  btSubtrair.Enabled := habilitado;
+  btMultiplicar.Enabled := habilitado;
+  btDividir.Enabled := habilitado;
+end;
+
 procedure TForm1.opcVisualClick(Sender: TObject);
 begin
  case opcVisual.ItemIndex of
-    0: TStyleManager.SetStyle('Windows');
-    1: TStyleManager.SetStyle('Glow');
-    2: TStyleManager.SetStyle('Aqua Light Slate');
+    0:
+    begin
+    TStyleManager.SetStyle('Windows');
+    registrarLog('Visual da aplicação alterado para Windows');
+    end;
+    1:
+    begin
+    TStyleManager.SetStyle('Glow');
+    registrarLog('Visual da aplicação alterado para Glow');
+    end;
+    2:
+    begin
+    TStyleManager.SetStyle('Aqua Light Slate');
+    registrarLog('Visual da aplicação alterado para Aqua light Slate');
+    end;
  end;
+
+end;
+
+procedure TForm1.registrarLog(acao: String);
+var
+  arquivo: TextFile;
+begin
+  try
+    AssignFile(arquivo, 'Logs.txt');
+    if FileExists('Logs.txt') then
+      Append(arquivo)
+    else
+      Rewrite(arquivo);
+
+    Writeln(arquivo,'['+DateTimeToStr(now())+']-' + acao);
+  finally
+    CloseFile(arquivo);
+
+  end;
+end;
+
+procedure TForm1.txtNum1Change(Sender: TObject);
+begin
+  if validarCampos then
+    habilitarBotoes(True)
+  else
+    habilitarBotoes(False);
+end;
+
+function TForm1.validarCampos: Boolean;
+begin
+  if (txtNum1.Text = '') or (txtNum2.Text = '') then
+    Result := False
+  else
+    try
+      StrToFloat(txtNum1.Text);
+      StrToFloat(txtNum2.Text);
+
+    Result := True;
+    except
+      on E: EConvertError do
+        begin
+          Result := False;
+        end;
+    end;
 
 end;
 

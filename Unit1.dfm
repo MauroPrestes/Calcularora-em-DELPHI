@@ -13,6 +13,8 @@ object Form1: TForm1
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
   TextHeight = 15
   object Label1: TLabel
     Left = 40
@@ -41,6 +43,7 @@ object Form1: TForm1
     Width = 177
     Height = 23
     TabOrder = 0
+    OnChange = txtNum1Change
   end
   object txtNum2: TEdit
     Left = 40
@@ -48,6 +51,7 @@ object Form1: TForm1
     Width = 177
     Height = 23
     TabOrder = 1
+    OnChange = txtNum1Change
   end
   object btSomar: TButton
     Left = 40
@@ -55,6 +59,7 @@ object Form1: TForm1
     Width = 25
     Height = 25
     Caption = '+'
+    Enabled = False
     TabOrder = 2
     OnClick = btSomarClick
   end
@@ -64,6 +69,7 @@ object Form1: TForm1
     Width = 25
     Height = 25
     Caption = '-'
+    Enabled = False
     TabOrder = 3
     OnClick = btSubtrairClick
   end
@@ -73,6 +79,7 @@ object Form1: TForm1
     Width = 25
     Height = 25
     Caption = '*'
+    Enabled = False
     TabOrder = 4
     OnClick = btMultiplicarClick
   end
@@ -82,6 +89,7 @@ object Form1: TForm1
     Width = 25
     Height = 25
     Caption = '/'
+    Enabled = False
     TabOrder = 5
     OnClick = btDividirClick
   end
@@ -90,6 +98,7 @@ object Form1: TForm1
     Top = 237
     Width = 177
     Height = 23
+    ReadOnly = True
     TabOrder = 6
   end
   object opcVisual: TRadioGroup
