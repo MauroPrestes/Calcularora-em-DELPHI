@@ -15,4 +15,5 @@ Uma calculadora desenvolvida em **Delphi** (Object Pascal) para fazer as 4 opera
 ## ⚙️ Como Executar
 1. Clone o repositório:
    ```bash
+   https://github.com/MauroPrestes/Calcularora-em-DELPHI.git
   
